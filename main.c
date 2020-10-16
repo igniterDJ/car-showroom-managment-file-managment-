@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 int ind_cost[10],required[10],slno=0,recp=2354;
 float cartax=0.5;
 //Database of customer
@@ -23,7 +24,6 @@ struct repair{
     int repair_cost[3];
 };int repno =10;
 struct repair repser[10];
-//struct repair *repser=arr;
 void printreh(int n)
 {
     int i;
@@ -147,7 +147,6 @@ int Car_service()
 
     for(i=0;i<repno;i++)
     {
-        //(repser+i)->repair_id=i+1;
         required[i]=-1;
     }
 
@@ -192,8 +191,6 @@ int Car_service()
         cust[slno].cust_cmonth=date/100;
         cust[slno].cust_cday=date-(100*cust[slno].cust_cmonth);
     }while(cust[slno].cust_cmonth>12 || cust[slno].cust_cmonth<=0 || cust[slno].cust_cday>31 || cust[slno].cust_cday<1);
-    //float service_tax;
-    //char carno[10],name[25],repair[x][4][100];
     printf("Enter your name:");
     scanf(" %[^\n]%*c",cust[slno].cust_name);
     printf("Enter your car number:");
@@ -312,7 +309,6 @@ int Car_service()
         total_time=(total_time/24)+1;
     }
 
-    //service_tax=0.5*total_cost/100;
     if(total_time==1)
     {
         printf("your repairs will be completed in %d day\n",total_time);
@@ -342,7 +338,7 @@ int Car_service()
     FILE *write=fopen("customer_data.txt","w");
     if(write==NULL)
     {
-        printf("error occoured");
+        printf("error occurred");
         return (1);
     }
     for(i=0;i<10;i++)
@@ -354,7 +350,7 @@ int Car_service()
     return(0);
 }
 //for taking car after service
-void Car_return()
+int Car_return()
 {
     int rcar_time,extra,extrarep,i,tcount=0;
     printf("Welcome back\nPlease enter your car no\n");
@@ -368,7 +364,7 @@ void Car_return()
             printf("Hi Mr/Ms %s\n",cust[i].cust_name);
             do
             {
-                printf("Enter date in the formate MMDD or MDD:\n");
+                printf("Enter date in the format MMDD or MDD:\n");
                 scanf("%d",&date);
                 cust[i].cust_dmonth=date/100;
                 cust[i].cust_dday=date-(100*cust[i].cust_dmonth);
@@ -425,11 +421,11 @@ void Car_return()
     }
     for(i=0;i<10;i++)
     {
-        //printf("%d",cust[i].cust_name);
         if(cust[i].cust_time!=0)
             fprintf(write,"%d %d %d %d %d %d %s %s\n",cust[i].cust_time,cust[i].cust_cday,cust[i].cust_cmonth,cust[i].cust_dday,cust[i].cust_dmonth,cust[i].cust_cost,cust[i].cust_carno,cust[i].cust_name);
     }
     fclose(write);
+    return 0;
 
 }
 
@@ -641,6 +637,7 @@ int Car_services()
             break;
 
         }
+        return (0);
 }
 void New_car()
 {
