@@ -40,7 +40,7 @@ void printreh(int n)
     printf("\n");
 }
 //To print bill
-void print_bill(char name[30],char no[10],int ccost,int exescount,int extracost)
+void print_bill(char name[30],char no[10],int ccost,int exescount,int extracost,int bill)
 {
     float service_tax,rcost;
     int i,lenght,j;
@@ -48,7 +48,10 @@ void print_bill(char name[30],char no[10],int ccost,int exescount,int extracost)
     rcost=ccost+service_tax;
 
     printreh(0);
-    printf("                                       CAR BILL\n");
+    if(bill==1)
+        printf("                                     ESTIMATED CAR BILL\n");
+    else
+        printf("                                         CAR BILL\n");
     printreh(1);
     printf("   HSD car services\n");
     printf("   HSD street\n");
@@ -325,7 +328,7 @@ int Car_service()
 
     if(receipt==1)
     {
-        print_bill(cust[slno].cust_name,cust[slno].cust_carno,total_cost,0,0);
+        print_bill(cust[slno].cust_name,cust[slno].cust_carno,total_cost,0,0,1);
 
     }
     if(receipt==0)
@@ -388,12 +391,12 @@ int Car_return()
                     printf("What is the total cost if extra repairs\n");
                     scanf("%d",&extrarep);
                     cust[i].cust_cost+=extrarep;
-                    print_bill(cust[i].cust_name,cust[i].cust_carno,cust[i].cust_cost,extra,extrarep);
+                    print_bill(cust[i].cust_name,cust[i].cust_carno,cust[i].cust_cost,extra,extrarep,0);
                 }
                 if(extra == 0)
                 {
                     printf("This is the bill\n");
-                    print_bill(cust[i].cust_name,cust[i].cust_carno,cust[i].cust_cost,0,0);
+                    print_bill(cust[i].cust_name,cust[i].cust_carno,cust[i].cust_cost,0,0,0);
                 }
 
             }
@@ -410,7 +413,6 @@ int Car_return()
     {
         printf("A car with car number %s is not with us\n\n\n",rcar_no);
     }
-    printf("hi\n");
 
     FILE *write=fopen("customer_data.txt","w");
 
