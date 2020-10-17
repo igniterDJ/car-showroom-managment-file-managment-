@@ -14,6 +14,8 @@ struct customer{
     int cust_dday;
     int cust_dmonth;
     int cust_cost;
+    int cust_required[10];
+    int cust_indcost[10];
 };int numcust=10;
 struct customer cust[10];
 //Database of types of repairs available
@@ -152,25 +154,7 @@ int Car_service()
     {
         required[i]=-1;
     }
-
-    int kn=0;
-    FILE* rfile=fopen("repairlist.txt","r");
-    if(rfile==NULL)
-    {
-        printf("not abel to open file");
-        return 2;
-    }
-
-    char buffer[200];
-    fgets(buffer,200,rfile);
-
-
-    while(!feof(rfile))
-    {
-        struct repair *p = repser +kn;
-        sscanf(buffer,"%d %d  %d  %d  %d  %s\n",&p->repair_id,&p->repair_time,&p->repair_cost[0],&p->repair_cost[1],&p->repair_cost[2],&p->repair_name);
-        fgets(buffer,200,rfile);kn++;
-    }
+    slno+=2;
 
 
     /*FILE *wfile = fopen("repairlist.txt","w+");
@@ -338,24 +322,18 @@ int Car_service()
 
     printf("If there are any extra repairs we will inform you when you come again\n\n\n");
 
-    FILE *write=fopen("customer_data.txt","w");
-    if(write==NULL)
-    {
-        printf("error occurred");
-        return (1);
-    }
     for(i=0;i<10;i++)
     {
-        if(cust[i].cust_time!=0)
-            fprintf(write,"%d %d %d %d %d %d %s %s\n",cust[i].cust_time,cust[i].cust_cday,cust[i].cust_cmonth,cust[i].cust_dday,cust[i].cust_dmonth,cust[i].cust_cost,cust[i].cust_carno,cust[i].cust_name);
+        cust[slno].cust_required[i]=required[i];
+        cust[slno].cust_indcost[i]=ind_cost[i];
     }
-    fclose(write);
+
     return(0);
 }
 //for taking car after service
 int Car_return()
 {
-    int rcar_time,extra,extrarep,i,tcount=0;
+    int rcar_time,extra,extrarep,i,tcount=0,j;
     printf("Welcome back\nPlease enter your car no\n");
     char rcar_no[10];
     scanf("%s",rcar_no);
@@ -383,6 +361,11 @@ int Car_return()
             }
             if(rcar_time>=cust[i].cust_time)
             {
+                for(j=0;j<10;j++)
+                {
+                    required[j]=cust[i].cust_required[j];
+                    ind_cost[j]=cust[i].cust_indcost[j];
+                }
                 printf("Your work has been completed\n");
                 printf("Give 1 if any extra repairs has been done else enter 0\n");
                 scanf("%d",&extra);
@@ -414,19 +397,6 @@ int Car_return()
         printf("A car with car number %s is not with us\n\n\n",rcar_no);
     }
 
-    FILE *write=fopen("customer_data.txt","w");
-
-    if(write==NULL)
-    {
-        printf("error occurred");
-        return 1;
-    }
-    for(i=0;i<10;i++)
-    {
-        if(cust[i].cust_time!=0)
-            fprintf(write,"%d %d %d %d %d %d %s %s\n",cust[i].cust_time,cust[i].cust_cday,cust[i].cust_cmonth,cust[i].cust_dday,cust[i].cust_dmonth,cust[i].cust_cost,cust[i].cust_carno,cust[i].cust_name);
-    }
-    fclose(write);
     return 0;
 
 }
@@ -601,21 +571,40 @@ int Car_services()
 {
     int choice,i;
 
+
+
+    int kn=0;
+    FILE* rfile=fopen("repairlist.txt","r");
+    if(rfile==NULL)
+    {
+        printf("not abel to open file");
+        return 2;
+    }
+    char buffer[200];
+    fgets(buffer,200,rfile);
+    while(!feof(rfile))
+    {
+        struct repair *p = repser +kn;
+        sscanf(buffer,"%d %d  %d  %d  %d  %s\n",&p->repair_id,&p->repair_time,&p->repair_cost[0],&p->repair_cost[1],&p->repair_cost[2],&p->repair_name);
+        fgets(buffer,200,rfile);kn++;
+    }
+
+
+
+
+
     FILE * custfile=fopen("customer_data.txt","r");
     if(custfile==NULL)
     {
         printf("cant open file\n");
         return (1);
     }
-
     char buff[200];
     fgets(buff,200,custfile);
-
-
     while(!feof(custfile))
     {
         struct customer *p=cust + i;
-        sscanf(buff ,"%d %d %d %d %d %d %s %s\n",&p->cust_time,&p->cust_cday,&p->cust_cmonth,&p->cust_dday,&p->cust_dmonth,&p->cust_cost,&p->cust_carno,&p->cust_name);
+        sscanf(buff ,"%d %d %d %d %d %d %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",&p->cust_time,&p->cust_cday,&p->cust_cmonth,&p->cust_dday,&p->cust_dmonth,&p->cust_cost,&p->cust_carno,&p->cust_name,&p->cust_required[0],&p->cust_required[1],&p->cust_required[2],&p->cust_required[3],&p->cust_required[4],&p->cust_required[5],&p->cust_required[6],&p->cust_required[7],&p->cust_required[8],&p->cust_required[9],&p->cust_indcost[0],&p->cust_indcost[1],&p->cust_indcost[2],&p->cust_indcost[3],&p->cust_indcost[4],&p->cust_indcost[5],&p->cust_indcost[6],&p->cust_indcost[7],&p->cust_indcost[8],&p->cust_indcost[9]);
         fgets(buff,200,custfile);
         i++;
     }
@@ -637,8 +626,23 @@ int Car_services()
             break;
         default:
             break;
-
         }
+
+
+
+    FILE *write=fopen("customer_data.txt","w");
+    if(write==NULL)
+    {
+        printf("error occurred");
+        return (1);
+    }
+    for(i=0;i<10;i++)
+    {
+        if(cust[i].cust_time==1 || cust[i].cust_time==2 || cust[i].cust_time==3 || cust[i].cust_time==4)
+            fprintf(write,"%d %d %d %d %d %d %s %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",cust[i].cust_time,cust[i].cust_cday,cust[i].cust_cmonth,cust[i].cust_dday,cust[i].cust_dmonth,cust[i].cust_cost,cust[i].cust_carno,cust[i].cust_name,cust[i].cust_required[0],cust[i].cust_required[1],cust[i].cust_required[2],cust[i].cust_required[3],cust[i].cust_required[4],cust[i].cust_required[5],cust[i].cust_required[6],cust[i].cust_required[7],cust[i].cust_required[8],cust[i].cust_required[9],cust[i].cust_indcost[0],cust[i].cust_indcost[1],cust[i].cust_indcost[2],cust[i].cust_indcost[3],cust[i].cust_indcost[4],cust[i].cust_indcost[5],cust[i].cust_indcost[6],cust[i].cust_indcost[7],cust[i].cust_indcost[8],cust[i].cust_indcost[9]);
+    }
+    fclose(write);
+
         return (0);
 }
 void New_car()
