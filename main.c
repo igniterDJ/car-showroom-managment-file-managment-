@@ -64,7 +64,7 @@ void print_bill(char name[30],char no[10],int ccost,int exescount,int extracost,
     printreh(0);
     printf("   SERVICE DESCRIPTION                                                                      RS AMOUNT\n");
     printreh(1);
-    for(i=0;i<10;i++)
+    for(i=0;i<num;i++)
     {
         if(repser[required[i]].repair_cost[0]!=-1 && ind_cost[required[i]]!=0)
         {
@@ -188,10 +188,11 @@ int Car_service()
     if(z>=0)
     {
         dist=z;
-        printf("As your car has traveled an approximate distance of %d KM we recommend you to take this services\n",dist);
+        printf("As your car has traveled an approximate distance of %d KM ",dist);
 
         if(z>3000)
         {
+            printf("we recommend you to take this services\n");
             printf("%s\n",repser[6].repair_name);
             if(5000<=dist)
             {
